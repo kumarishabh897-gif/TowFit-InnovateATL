@@ -1,7 +1,13 @@
 from app.models.assumption import Assumption
 from app.models.common import AssumptionStatus, Provenance, VehicleClass
 from app.models.crash import CrashCondition, NeutralStatus, Orientation
-from app.models.decision_record import DecisionEvent, DecisionRecord
+from app.models.decision_record import (
+    RECOMMENDED_ACTION,
+    DecisionEvent,
+    DecisionRecord,
+    EventKind,
+    OperatorAction,
+)
 from app.models.scene import IncidentSeverity, LiveTrafficRisk, Scene, Severity
 from app.models.unit import Position, UnitProfile
 from app.models.vehicle import VehicleProfile
@@ -26,15 +32,18 @@ __all__ = [
     "CrashCondition",
     "DecisionEvent",
     "DecisionRecord",
+    "EventKind",
     "DISCLAIMER",
     "EvaluationInput",
     "IncidentSeverity",
     "LiveTrafficRisk",
     "MinutesEstimate",
     "NeutralStatus",
+    "OperatorAction",
     "Orientation",
     "Position",
     "Provenance",
+    "RECOMMENDED_ACTION",
     "Reason",
     "ReasonEffect",
     "Scene",

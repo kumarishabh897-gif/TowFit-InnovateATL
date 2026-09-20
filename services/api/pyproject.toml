@@ -8,6 +8,7 @@ dependencies = [
   "pydantic>=2.9",
   "sqlmodel>=0.0.22",
   "pyyaml>=6.0",
+  "ruamel.yaml>=0.18",  # round-trips assumptions.yaml on live edits without losing its comments
   "uvicorn[standard]>=0.30",
 ]
 

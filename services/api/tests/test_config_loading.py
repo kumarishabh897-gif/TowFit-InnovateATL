@@ -111,3 +111,24 @@ def test_bad_edit_keeps_last_good_config(tmp_path):
     # a later fix recovers, and nothing half-loaded was kept in between
     shutil.copy(REPO_ROOT / "config" / "assumptions.yaml", cfg / "assumptions.yaml")
     assert store.fleet["PATROL-42"].rig_capacity_lb == 6000
+
+
+def test_an_api_edit_is_visible_even_on_a_filesystem_with_coarse_timestamps(tmp_path, monkeypatch):
+    """update_assumptions forces a reload, so a same-second mtime cannot leave the store serving the old value."""
+    monkeypatch.setattr(ConfigStore, "_mtime", lambda self, name: 1)  # every file always looks unchanged
+    cfg = _copy_config(tmp_path)
+    store = ConfigStore(cfg)
+    assert store.fleet["PATROL-42"].rig_capacity_lb == 6000
+    store.update_assumptions([{"key": "unit.patrol_42.rig_capacity_lb", "value": 5000}])
+    assert store.fleet["PATROL-42"].rig_capacity_lb == 5000
+
+
+def test_malformed_entries_are_config_errors_not_crashes(tmp_path):
+    cfg = _copy_config(tmp_path)
+    (cfg / "assumptions.yaml").write_text("assumptions: [oops]\n")
+    with pytest.raises(ConfigError, match="mapping"):
+        ConfigStore(cfg)
+    shutil.copy(REPO_ROOT / "config" / "assumptions.yaml", cfg / "assumptions.yaml")
+    (cfg / "fleet.yaml").write_text("units: [oops]\n")
+    with pytest.raises(ConfigError, match="mapping"):
+        ConfigStore(cfg)

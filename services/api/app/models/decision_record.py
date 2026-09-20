@@ -1,6 +1,28 @@
 from datetime import UTC, datetime
+from enum import StrEnum
 
 from sqlmodel import Field, SQLModel
+
+from app.models.verdict import VerdictStatus
+
+
+class OperatorAction(StrEnum):
+    DEPLOY = "deploy"
+    WAIT_FOR_CONFIRMATION = "wait_for_confirmation"
+    DISPATCH_WRECKER = "dispatch_wrecker"
+
+
+class EventKind(StrEnum):
+    OPERATOR_ACTION = "operator_action"
+    OUTCOME = "outcome"
+
+
+# What TowFit recommends for each verdict. The operator may do something else; the log records both.
+RECOMMENDED_ACTION: dict[VerdictStatus, OperatorAction] = {
+    VerdictStatus.GREEN: OperatorAction.DEPLOY,
+    VerdictStatus.YELLOW: OperatorAction.WAIT_FOR_CONFIRMATION,
+    VerdictStatus.RED: OperatorAction.DISPATCH_WRECKER,
+}
 
 
 def _utcnow() -> datetime:
@@ -22,9 +44,10 @@ class DecisionRecord(SQLModel, table=True):
     verdict: str = Field(index=True)  # GREEN | YELLOW | RED
     loaded_scenario_id: str | None = None
     inputs_json: str  # the full EvaluationInput as submitted
+    verdict_json: str  # the full Verdict: status, reasons, clearance, wrecker, confirmation, disclaimer
     reasons_json: str  # every reason, in evaluation order
-    rules_fired_json: str  # rule ids that fired
-    assumptions_json: str  # snapshot of the assumption entries used, since they are editable
+    rules_fired_json: str  # [{rule_id, effect}] in evaluation order
+    assumptions_json: str  # snapshot (value, status, source) of every assumption used, since they are editable
     disclaimer: str
 
 

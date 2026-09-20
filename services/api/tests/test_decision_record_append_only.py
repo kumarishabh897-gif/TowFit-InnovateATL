@@ -20,6 +20,7 @@ def _record() -> DecisionRecord:
         vehicle_summary="2022 Honda Accord",
         verdict="GREEN",
         inputs_json="{}",
+        verdict_json="{}",
         reasons_json="[]",
         rules_fired_json="[]",
         assumptions_json="{}",
