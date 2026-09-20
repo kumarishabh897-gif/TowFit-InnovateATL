@@ -1,0 +1,38 @@
+{
+  "id": "02_red_box_truck",
+  "title": "Scenario 2: the wrong tool",
+  "description": "Loaded delivery box truck, already in neutral. Neutral does not rescue it: the class and the weight each rule it out. Inputs only: the engine computes the verdict.",
+  "input": {
+    "unit_id": "PATROL-42",
+    "loaded_scenario_id": "02_red_box_truck",
+    "vehicle": {
+      "make_model": "Isuzu NPR-HD box truck (loaded)",
+      "vehicle_class": "box_truck",
+      "estimated_curb_weight_lb": 8000,
+      "curb_weight_provenance": "ASSUMED",
+      "curb_weight_source": "No curb weight sourced; class-typical guess. GVWR 14,500 lb per Isuzu spec sheet title.",
+      "estimated_load_weight_lb": 6000,
+      "load_weight_provenance": "ASSUMED",
+      "classification_provenance": "OPERATOR"
+    },
+    "crash": {
+      "tires_intact": 4,
+      "wheels_locked_or_damaged": 0,
+      "axle_damage": false,
+      "airbags_deployed": false,
+      "orientation": "upright",
+      "fire_or_fuel_leak": false,
+      "neutral_status": "in_neutral"
+    },
+    "scene": {
+      "lanes_total": 3,
+      "lanes_blocked": 2,
+      "shoulder_available": true,
+      "shoulder_width_ok": true,
+      "grade_or_curve": false,
+      "live_traffic_risk": "high",
+      "live_traffic_risk_provenance": "SIM"
+    },
+    "severity": { "level": "medium", "provenance": "OPERATOR" }
+  }
+}

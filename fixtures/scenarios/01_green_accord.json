@@ -1,0 +1,39 @@
+{
+  "id": "01_green_accord",
+  "title": "Scenario 1: the easy case",
+  "description": "2022 Honda Accord, clean crash state, can be shifted into neutral, shoulder available. Inputs only: the engine computes the verdict.",
+  "input": {
+    "unit_id": "PATROL-42",
+    "loaded_scenario_id": "01_green_accord",
+    "vehicle": {
+      "make_model": "2022 Honda Accord",
+      "vehicle_class": "passenger_car",
+      "estimated_curb_weight_lb": 3300,
+      "curb_weight_provenance": "ESTIMATED",
+      "curb_weight_source": "Honda info center, 2022 Accord specifications (trim range 3,150-3,446 lb)",
+      "drivetrain": "FWD",
+      "tire_width_mm": 225,
+      "wheelbase_mm": 2830,
+      "classification_provenance": "OPERATOR"
+    },
+    "crash": {
+      "tires_intact": 4,
+      "wheels_locked_or_damaged": 0,
+      "axle_damage": false,
+      "airbags_deployed": false,
+      "orientation": "upright",
+      "fire_or_fuel_leak": false,
+      "neutral_status": "can_be_shifted"
+    },
+    "scene": {
+      "lanes_total": 3,
+      "lanes_blocked": 1,
+      "shoulder_available": true,
+      "shoulder_width_ok": true,
+      "grade_or_curve": false,
+      "live_traffic_risk": "medium",
+      "live_traffic_risk_provenance": "SIM"
+    },
+    "severity": { "level": "low", "provenance": "OPERATOR" }
+  }
+}

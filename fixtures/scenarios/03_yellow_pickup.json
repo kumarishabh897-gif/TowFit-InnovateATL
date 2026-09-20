@@ -1,0 +1,37 @@
+{
+  "id": "03_yellow_pickup",
+  "title": "Scenario 3: the judgment call",
+  "description": "Full-size pickup near the rig's weight margin, airbags deployed, shifter unresponsive after the crash, narrow shoulder on a grade. Inputs only: the engine computes the verdict.",
+  "input": {
+    "unit_id": "PATROL-42",
+    "loaded_scenario_id": "03_yellow_pickup",
+    "vehicle": {
+      "make_model": "2022 Ford F-150 SuperCrew 4x4",
+      "vehicle_class": "pickup",
+      "estimated_curb_weight_lb": 5100,
+      "curb_weight_provenance": "ESTIMATED",
+      "curb_weight_source": "Edmunds / TheCarConnection 2022 F-150 pages: 5,020-5,267 lb for SuperCrew 4x4 (unverified, see vehicle_specs.yaml)",
+      "drivetrain": "4WD",
+      "classification_provenance": "OPERATOR"
+    },
+    "crash": {
+      "tires_intact": 4,
+      "wheels_locked_or_damaged": 0,
+      "axle_damage": false,
+      "airbags_deployed": true,
+      "orientation": "upright",
+      "fire_or_fuel_leak": false,
+      "neutral_status": "unconfirmed"
+    },
+    "scene": {
+      "lanes_total": 3,
+      "lanes_blocked": 1,
+      "shoulder_available": true,
+      "shoulder_width_ok": false,
+      "grade_or_curve": true,
+      "live_traffic_risk": "medium",
+      "live_traffic_risk_provenance": "SIM"
+    },
+    "severity": { "level": "medium", "provenance": "OPERATOR" }
+  }
+}
