@@ -1,0 +1,27 @@
+# Demo patrol units. The rig mounts on a patrol car (not a HERO truck).
+#
+# Rig specs are `ref: <key>` pointers into config/assumptions.yaml so every
+# unvalidated number stays visible and editable in one place. The loader
+# resolves them, and records which keys each unit depends on.
+
+units:
+  - unit_id: PATROL-42
+    vehicle_platform: patrol_car   # exact platform model comes from the hardware team
+    rig_attachment_type: "tire-lift mover v1"
+    rig_capacity_lb: { ref: unit.patrol_42.rig_capacity_lb }
+    rig_tire_width_range_mm: { ref: unit.patrol_42.rig_tire_width_range_mm }
+    rig_min_ground_clearance_mm: { ref: unit.patrol_42.rig_min_ground_clearance_mm }
+    rig_max_wheelbase_mm: { ref: unit.patrol_42.rig_max_wheelbase_mm }
+    # Explicitly excludes box_truck, bus, tractor_trailer, motorcycle (brief section 5.1).
+    compatible_vehicle_classes: [passenger_car, suv, pickup, van]
+    current_position: { lat: 33.7490, lon: -84.3880, provenance: SIM }
+
+  - unit_id: PATROL-17
+    vehicle_platform: patrol_car
+    rig_attachment_type: "tire-lift mover v1"
+    rig_capacity_lb: { ref: unit.patrol_17.rig_capacity_lb }
+    rig_tire_width_range_mm: { ref: unit.patrol_17.rig_tire_width_range_mm }
+    rig_min_ground_clearance_mm: { ref: unit.patrol_17.rig_min_ground_clearance_mm }
+    rig_max_wheelbase_mm: { ref: unit.patrol_17.rig_max_wheelbase_mm }
+    compatible_vehicle_classes: [passenger_car, suv, pickup, van]
+    current_position: { lat: 33.7756, lon: -84.3963, provenance: SIM }

@@ -1,0 +1,134 @@
+# ClearanceOS assumptions registry (brief §2, rule 2).
+#
+# Every number that was not measured lives here — no silent defaults in code.
+# The UI shows a persistent count of entries whose status is not VALIDATED.
+#
+#   key     unique dotted id; fleet.yaml refers to entries with `ref: <key>`
+#   value   scalar, or [low, high] for a range
+#   unit    unit of `value`
+#   source  where the number came from ("none" if it is invented for the demo)
+#   status  PLACEHOLDER (invented / unverified) | SOURCED (a public source was read) | VALIDATED (confirmed by the owning team)
+#   note    caveats
+#
+# Edits made through PUT /v1/assumptions (Phase 2) are picked up on the next evaluate call.
+
+assumptions:
+  # ---- Rig envelope: PATROL-42 (hardware team to supply real values) ----
+  - key: unit.patrol_42.rig_capacity_lb
+    value: 6000
+    unit: lb
+    source: "Brief section 7 demo figure. No hardware source yet."
+    status: PLACEHOLDER
+    note: "Max vehicle weight the rig is rated to move. Replace with the CAD/hardware team's number. May end up limited by the patrol car itself."
+  - key: unit.patrol_42.rig_tire_width_range_mm
+    value: [155, 315]
+    unit: mm
+    source: none
+    status: PLACEHOLDER
+    note: "Invented to cover common passenger, SUV and pickup tires. Needs the rig's real grip range."
+  - key: unit.patrol_42.rig_min_ground_clearance_mm
+    value: 90
+    unit: mm
+    source: none
+    status: PLACEHOLDER
+    note: "Lowest vehicle ground clearance the rig can reach under. Invented."
+  - key: unit.patrol_42.rig_max_wheelbase_mm
+    value: 4000
+    unit: mm
+    source: none
+    status: PLACEHOLDER
+    note: "Longest wheelbase the rig can handle. Invented."
+
+  # ---- Rig envelope: PATROL-17 (second demo unit, smaller capacity so a judge can swap units and watch verdicts change) ----
+  - key: unit.patrol_17.rig_capacity_lb
+    value: 5000
+    unit: lb
+    source: none
+    status: PLACEHOLDER
+    note: "Demo-only value chosen below the pickup scenario's weight."
+  - key: unit.patrol_17.rig_tire_width_range_mm
+    value: [155, 315]
+    unit: mm
+    source: none
+    status: PLACEHOLDER
+    note: "Copied from PATROL-42; invented."
+  - key: unit.patrol_17.rig_min_ground_clearance_mm
+    value: 90
+    unit: mm
+    source: none
+    status: PLACEHOLDER
+    note: "Copied from PATROL-42; invented."
+  - key: unit.patrol_17.rig_max_wheelbase_mm
+    value: 4000
+    unit: mm
+    source: none
+    status: PLACEHOLDER
+    note: "Copied from PATROL-42; invented."
+
+  # ---- Rule engine ----
+  - key: engine.weight_advisory_fraction
+    value: 0.8
+    unit: fraction of rig_capacity_lb
+    source: "Brief section 6.2 example (80%)."
+    status: PLACEHOLDER
+    note: "Above this fraction the engine adds an advisory note. Under the neutral-based rules it no longer changes the verdict; only exceeding capacity (RED) does."
+
+  # ---- Clearance-time estimate (GREEN / YELLOW) ----
+  - key: clearance.compatible_vehicle_minutes_point
+    value: 4
+    unit: minutes
+    source: none
+    status: PLACEHOLDER
+    note: "Point estimate for a compatible vehicle with a shoulder available. Invented for the demo; no field data."
+  - key: clearance.compatible_vehicle_minutes_range
+    value: [3, 6]
+    unit: minutes
+    source: "Brief section 6.3 example (3-6 minutes)."
+    status: PLACEHOLDER
+    note: "Stated range shown next to the point estimate."
+  - key: clearance.supervisor_confirmation_delay_minutes_range
+    value: [2, 5]
+    unit: minutes
+    source: none
+    status: PLACEHOLDER
+    note: "Extra time added to a YELLOW clearance estimate while waiting for confirmation. Invented."
+
+  # ---- Wrecker ETA = dispatch delay + distance / speed (simple estimate, not a routing model) ----
+  - key: wrecker.avg_response_speed_mph
+    value: 45
+    unit: mph
+    source: none
+    status: PLACEHOLDER
+    note: "Average tow truck response speed. Invented."
+  - key: wrecker.light_duty.dispatch_delay_minutes
+    value: 5
+    unit: minutes
+    source: none
+    status: PLACEHOLDER
+    note: "Time to assign and roll a light-duty wrecker or flatbed. Invented."
+  - key: wrecker.light_duty.distance_miles
+    value: 8
+    unit: miles
+    source: none
+    status: PLACEHOLDER
+    note: "Assumed distance from the nearest light-duty wrecker. Replaced by fleet proximity in P1."
+  - key: wrecker.heavy_duty.dispatch_delay_minutes
+    value: 12
+    unit: minutes
+    source: none
+    status: PLACEHOLDER
+    note: "Heavy-duty wreckers are fewer and slower to assign. Invented."
+  - key: wrecker.heavy_duty.distance_miles
+    value: 15
+    unit: miles
+    source: none
+    status: PLACEHOLDER
+    note: "Assumed distance from the nearest heavy-duty wrecker. Invented."
+
+  # ---- Backup-avoided estimate (brief section 6.5) ----
+  - key: backup.minutes_per_mile_of_backup
+    value: 10
+    unit: minutes of lane blockage per mile of backup
+    source: "GDOT rule of thumb as reported by the Atlanta Journal-Constitution: https://www.ajc.com/atlanta-traffic/gridlock-guy-hero-program-slowing-down-to-speed-up/GNIH35NBPVCDXJUFFKCLFU3U5U/"
+    status: SOURCED
+    note: "Found via a search-result summary; the article itself has not been opened to confirm the wording. Illustrative estimate only, not a validated model."
