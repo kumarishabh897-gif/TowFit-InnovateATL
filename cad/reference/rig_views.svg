@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="517" height="797" viewBox="0 0 517 797" font-family="ui-sans-serif, system-ui, sans-serif">
+<rect width="100%" height="100%" fill="#0f1319"/>
+<text x="46" y="30" fill="#e8ecf2" font-size="17" font-weight="600">ClearanceOS tire-lift mover v1</text>
+<text x="46" y="48" fill="#7f8b9e" font-size="11">concept model - all envelope values PLACEHOLDER in config/assumptions.yaml</text>
+<text x="46" y="80" fill="#9fb0c7" font-size="12" font-weight="600">TOP  (looking down)</text>
+<text x="306" y="80" fill="#5d6a7d" font-size="10">X lateral horizontal, Y fore-aft vertical</text>
+<rect x="253.2" y="280.1" width="11.2" height="92.4" fill="#8b93a7" fill-opacity="0.68" stroke="#8b93a7" stroke-width="0.7"/>
+<rect x="241.1" y="276.1" width="35.2" height="3.5" fill="#8b93a7" fill-opacity="0.68" stroke="#8b93a7" stroke-width="0.7"/>
+<rect x="241.4" y="261.4" width="4.0" height="19.8" fill="#6f7b92" fill-opacity="0.68" stroke="#6f7b92" stroke-width="0.7"/>
+<rect x="272.2" y="261.4" width="4.0" height="19.8" fill="#6f7b92" fill-opacity="0.68" stroke="#6f7b92" stroke-width="0.7"/>
+<rect x="241.4" y="261.4" width="34.8" height="19.8" fill="#6f7b92" fill-opacity="0.68" stroke="#6f7b92" stroke-width="0.7"/>
+<rect x="249.9" y="262.5" width="17.6" height="17.6" fill="#c2703d" fill-opacity="0.68" stroke="#c2703d" stroke-width="0.7"/>
+<rect x="254.8" y="267.3" width="7.9" height="7.9" fill="#c2703d" fill-opacity="0.68" stroke="#c2703d" stroke-width="0.7"/>
+<rect x="237.8" y="262.9" width="41.8" height="16.7" fill="#c2703d" fill-opacity="0.68" stroke="#c2703d" stroke-width="0.7"/>
+<rect x="247.7" y="181.1" width="22.0" height="80.3" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="247.7" y="181.1" width="22.0" height="80.3" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="247.7" y="181.1" width="1.3" height="80.3" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="268.4" y="181.1" width="1.3" height="80.3" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="104.7" y="170.1" width="308.0" height="22.0" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="104.7" y="170.1" width="308.0" height="22.0" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="104.7" y="190.8" width="308.0" height="1.3" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="104.7" y="170.1" width="308.0" height="1.3" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="49.7" y="171.9" width="132.0" height="18.5" fill="#5c9ec7" fill-opacity="0.68" stroke="#5c9ec7" stroke-width="0.7"/>
+<rect x="335.7" y="171.9" width="132.0" height="18.5" fill="#5c9ec7" fill-opacity="0.68" stroke="#5c9ec7" stroke-width="0.7"/>
+<rect x="46.0" y="172.3" width="84.5" height="8.8" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="48.6" y="147.0" width="79.2" height="19.8" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="48.6" y="98.6" width="79.2" height="19.8" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="46.0" y="92.0" width="2.6" height="81.4" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="127.8" y="92.0" width="2.6" height="81.4" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="387.0" y="172.3" width="84.5" height="8.8" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="389.6" y="147.0" width="79.2" height="19.8" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="389.6" y="98.6" width="79.2" height="19.8" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="387.0" y="92.0" width="2.6" height="81.4" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="468.8" y="92.0" width="2.6" height="81.4" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<text x="46" y="385.5" fill="#4f5b6d" font-size="9">1934 x 1275 mm</text>
+<text x="46" y="418" fill="#9fb0c7" font-size="12" font-weight="600">FRONT  (from the disabled vehicle)</text>
+<text x="306" y="418" fill="#5d6a7d" font-size="10">X lateral horizontal, Z height vertical</text>
+<line x1="36.0" y1="551.3" x2="481.5" y2="551.3" stroke="#3a4454" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="485.5" y="554.3" fill="#4f5b6d" font-size="9">road</text>
+<rect x="253.2" y="457.7" width="11.2" height="11.2" fill="#8b93a7" fill-opacity="0.68" stroke="#8b93a7" stroke-width="0.7"/>
+<rect x="241.1" y="445.7" width="35.2" height="35.2" fill="#8b93a7" fill-opacity="0.68" stroke="#8b93a7" stroke-width="0.7"/>
+<rect x="241.4" y="432.5" width="4.0" height="101.2" fill="#6f7b92" fill-opacity="0.68" stroke="#6f7b92" stroke-width="0.7"/>
+<rect x="272.2" y="432.5" width="4.0" height="101.2" fill="#6f7b92" fill-opacity="0.68" stroke="#6f7b92" stroke-width="0.7"/>
+<rect x="241.4" y="430.5" width="34.8" height="4.0" fill="#6f7b92" fill-opacity="0.68" stroke="#6f7b92" stroke-width="0.7"/>
+<rect x="249.9" y="480.9" width="17.6" height="44.0" fill="#c2703d" fill-opacity="0.68" stroke="#c2703d" stroke-width="0.7"/>
+<rect x="254.8" y="458.9" width="7.9" height="26.4" fill="#c2703d" fill-opacity="0.68" stroke="#c2703d" stroke-width="0.7"/>
+<rect x="237.8" y="523.8" width="41.8" height="19.8" fill="#c2703d" fill-opacity="0.68" stroke="#c2703d" stroke-width="0.7"/>
+<rect x="247.7" y="533.7" width="22.0" height="1.3" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="247.7" y="545.6" width="22.0" height="1.3" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="247.7" y="535.0" width="1.3" height="10.6" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="268.4" y="535.0" width="1.3" height="10.6" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="104.7" y="533.7" width="308.0" height="1.3" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="104.7" y="545.6" width="308.0" height="1.3" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="104.7" y="535.0" width="308.0" height="10.6" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="104.7" y="535.0" width="308.0" height="10.6" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="49.7" y="535.4" width="132.0" height="9.7" fill="#5c9ec7" fill-opacity="0.68" stroke="#5c9ec7" stroke-width="0.7"/>
+<rect x="335.7" y="535.4" width="132.0" height="9.7" fill="#5c9ec7" fill-opacity="0.68" stroke="#5c9ec7" stroke-width="0.7"/>
+<rect x="46.0" y="535.4" width="84.5" height="9.7" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="48.6" y="527.1" width="79.2" height="19.8" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="48.6" y="527.1" width="79.2" height="19.8" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="46.0" y="518.3" width="2.6" height="28.6" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="127.8" y="518.3" width="2.6" height="28.6" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="387.0" y="535.4" width="84.5" height="9.7" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="389.6" y="527.1" width="79.2" height="19.8" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="389.6" y="527.1" width="79.2" height="19.8" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="387.0" y="518.3" width="2.6" height="28.6" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="468.8" y="518.3" width="2.6" height="28.6" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<text x="46" y="559.9" fill="#4f5b6d" font-size="9">1934 x 529 mm</text>
+<text x="46" y="593" fill="#9fb0c7" font-size="12" font-weight="600">SIDE  (from the kerb)</text>
+<text x="306" y="593" fill="#5d6a7d" font-size="10">Y fore-aft horizontal, Z height vertical</text>
+<line x1="36.0" y1="725.7" x2="336.5" y2="725.7" stroke="#3a4454" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="340.5" y="728.7" fill="#4f5b6d" font-size="9">road</text>
+<rect x="46.0" y="632.1" width="92.4" height="11.2" fill="#8b93a7" fill-opacity="0.68" stroke="#8b93a7" stroke-width="0.7"/>
+<rect x="138.8" y="620.1" width="3.5" height="35.2" fill="#8b93a7" fill-opacity="0.68" stroke="#8b93a7" stroke-width="0.7"/>
+<rect x="137.3" y="606.9" width="19.8" height="101.2" fill="#6f7b92" fill-opacity="0.68" stroke="#6f7b92" stroke-width="0.7"/>
+<rect x="137.3" y="606.9" width="19.8" height="101.2" fill="#6f7b92" fill-opacity="0.68" stroke="#6f7b92" stroke-width="0.7"/>
+<rect x="137.3" y="604.9" width="19.8" height="4.0" fill="#6f7b92" fill-opacity="0.68" stroke="#6f7b92" stroke-width="0.7"/>
+<rect x="138.4" y="655.3" width="17.6" height="44.0" fill="#c2703d" fill-opacity="0.68" stroke="#c2703d" stroke-width="0.7"/>
+<rect x="143.2" y="633.3" width="7.9" height="26.4" fill="#c2703d" fill-opacity="0.68" stroke="#c2703d" stroke-width="0.7"/>
+<rect x="138.8" y="698.2" width="16.7" height="19.8" fill="#c2703d" fill-opacity="0.68" stroke="#c2703d" stroke-width="0.7"/>
+<rect x="157.1" y="708.1" width="80.3" height="1.3" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="157.1" y="719.9" width="80.3" height="1.3" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="157.1" y="709.4" width="80.3" height="10.6" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="157.1" y="709.4" width="80.3" height="10.6" fill="#4e7ca1" fill-opacity="0.68" stroke="#4e7ca1" stroke-width="0.7"/>
+<rect x="226.4" y="708.1" width="22.0" height="1.3" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="226.4" y="719.9" width="22.0" height="1.3" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="226.4" y="709.4" width="1.3" height="10.6" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="247.1" y="709.4" width="1.3" height="10.6" fill="#3f6c93" fill-opacity="0.68" stroke="#3f6c93" stroke-width="0.7"/>
+<rect x="228.2" y="709.8" width="18.5" height="9.7" fill="#5c9ec7" fill-opacity="0.68" stroke="#5c9ec7" stroke-width="0.7"/>
+<rect x="228.2" y="709.8" width="18.5" height="9.7" fill="#5c9ec7" fill-opacity="0.68" stroke="#5c9ec7" stroke-width="0.7"/>
+<rect x="237.4" y="709.8" width="8.8" height="9.7" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<circle cx="261.6" cy="711.4" r="9.9" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<circle cx="310.0" cy="711.4" r="9.9" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="245.1" y="692.7" width="81.4" height="28.6" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="245.1" y="692.7" width="81.4" height="28.6" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="237.4" y="709.8" width="8.8" height="9.7" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<circle cx="261.6" cy="711.4" r="9.9" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<circle cx="310.0" cy="711.4" r="9.9" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="245.1" y="692.7" width="81.4" height="28.6" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<rect x="245.1" y="692.7" width="81.4" height="28.6" fill="#c9a227" fill-opacity="0.68" stroke="#c9a227" stroke-width="0.7"/>
+<text x="46" y="734.3" fill="#4f5b6d" font-size="9">1275 x 529 mm</text>
+<rect x="46" y="749" width="9" height="9" fill="#8b93a7"/>
+<text x="60" y="757" fill="#7f8b9e" font-size="9.5">01 Receiver Stinger</text>
+<rect x="261" y="749" width="9" height="9" fill="#6f7b92"/>
+<text x="275" y="757" fill="#7f8b9e" font-size="9.5">02 Mast</text>
+<rect x="476" y="749" width="9" height="9" fill="#c2703d"/>
+<text x="490" y="757" fill="#7f8b9e" font-size="9.5">03 Lift Actuator</text>
+<rect x="691" y="749" width="9" height="9" fill="#4e7ca1"/>
+<text x="705" y="757" fill="#7f8b9e" font-size="9.5">04 Reach Boom</text>
+<rect x="46" y="773" width="9" height="9" fill="#3f6c93"/>
+<text x="60" y="781" fill="#7f8b9e" font-size="9.5">05 Main Crossbeam</text>
+<rect x="261" y="773" width="9" height="9" fill="#5c9ec7"/>
+<text x="275" y="781" fill="#7f8b9e" font-size="9.5">06 Telescoping Arms</text>
+<rect x="476" y="773" width="9" height="9" fill="#c9a227"/>
+<text x="490" y="781" fill="#7f8b9e" font-size="9.5">07 Tire Cradles</text>
+</svg>
