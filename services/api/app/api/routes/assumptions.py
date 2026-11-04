@@ -1,3 +1,5 @@
+import os
+
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.api.deps import get_config
@@ -26,6 +28,8 @@ def edit_assumptions(body: AssumptionsUpdateRequest, config: ConfigStore = Depen
     All edits in one request apply together or not at all. The file's comments are kept.
     Past Decision Records keep the values they were evaluated with.
     """
+    if os.environ.get("TOWFIT_READ_ONLY_CONFIG"):
+        raise HTTPException(status_code=403, detail="Assumption editing is disabled in this deployment (read-only files).")
     try:
         config.update_assumptions([u.model_dump(mode="json", exclude_none=True) for u in body.updates])
     except KeyError as exc:

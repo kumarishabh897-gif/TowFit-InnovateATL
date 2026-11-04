@@ -25,3 +25,5 @@ next-env.d.ts
 # os / editor
 .DS_Store
 *.egg-info/
+.vercel/
+.vercel

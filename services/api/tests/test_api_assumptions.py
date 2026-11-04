@@ -140,3 +140,12 @@ def test_a_hand_edit_that_breaks_the_file_is_reported_not_silently_ignored(api):
     (api.config_dir / "assumptions.yaml").write_text("assumptions: [oops]\n")
     response = api.evaluate(load_scenario("01_green_accord"))
     assert response.status_code == 500 and "Configuration is invalid" in response.json()["detail"]
+
+
+def test_a_read_only_deployment_refuses_edits_with_a_clear_message(api, monkeypatch):
+    monkeypatch.setenv("TOWFIT_READ_ONLY_CONFIG", "1")
+    before = file_text(api)
+    response = put(api, {"key": CAPACITY, "value": 5000})
+    assert response.status_code == 403 and "read-only" in response.json()["detail"]
+    assert file_text(api) == before
+    assert api.client.get("/v1/assumptions").status_code == 200  # reading still works

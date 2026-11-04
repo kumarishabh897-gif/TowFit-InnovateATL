@@ -1,0 +1,11 @@
+.git
+**/node_modules
+**/.venv
+**/.next
+**/__pycache__
+**/.pytest_cache
+**/.hypothesis
+services/api/tests
+services/api/data
+.env
+.env.*
