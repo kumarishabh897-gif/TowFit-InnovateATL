@@ -261,6 +261,56 @@
         "title": "AssumptionsUpdateRequest",
         "type": "object"
       },
+      "CameraClassification": {
+        "description": "What the demo classifier \"sees\" in a canned frame. There is no computer-vision model behind this.",
+        "properties": {
+          "frame_id": {
+            "title": "Frame Id",
+            "type": "string"
+          },
+          "label": {
+            "default": "SIM classification (demo fixture, not a live model)",
+            "title": "Label",
+            "type": "string"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance",
+            "default": "SIM"
+          },
+          "vehicle": {
+            "$ref": "#/components/schemas/VehicleProfile"
+          }
+        },
+        "required": [
+          "frame_id",
+          "vehicle"
+        ],
+        "title": "CameraClassification",
+        "type": "object"
+      },
+      "CameraFrame": {
+        "properties": {
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "image_url": {
+            "title": "Image Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "caption",
+          "image_url"
+        ],
+        "title": "CameraFrame",
+        "type": "object"
+      },
       "ClassDefaults": {
         "description": "Class-typical fallback values. Always ASSUMED (see ClassDefaultsMeta).",
         "properties": {
@@ -1651,6 +1701,115 @@
         "summary": "Edit Assumptions",
         "tags": [
           "assumptions"
+        ]
+      }
+    },
+    "/v1/camera/frames": {
+      "get": {
+        "description": "The canned demo frames. These are fixtures, not a live feed.",
+        "operationId": "list_frames_v1_camera_frames_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CameraFrame"
+                  },
+                  "title": "Response List Frames V1 Camera Frames Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Frames",
+        "tags": [
+          "camera"
+        ]
+      }
+    },
+    "/v1/camera/frames/{frame_id}/classify": {
+      "post": {
+        "description": "Fill a vehicle profile from a canned frame. Labeled SIM: it is a hand-made mapping, not a trained model.",
+        "operationId": "classify_frame_v1_camera_frames__frame_id__classify_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "frame_id",
+            "required": true,
+            "schema": {
+              "title": "Frame Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CameraClassification"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Classify Frame",
+        "tags": [
+          "camera"
+        ]
+      }
+    },
+    "/v1/camera/frames/{frame_id}/image": {
+      "get": {
+        "operationId": "frame_image_v1_camera_frames__frame_id__image_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "frame_id",
+            "required": true,
+            "schema": {
+              "title": "Frame Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Frame Image",
+        "tags": [
+          "camera"
         ]
       }
     },

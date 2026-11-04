@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Demo fixture frame 4: delivery box truck">
+  <title>Demo fixture frame 4: delivery box truck</title>
+  <rect width="640" height="360" fill="#cfd8df"/>
+  <rect y="226" width="640" height="98" fill="#aeb9c2"/>
+  <path d="M0 300H640" stroke="#e9eef2" stroke-width="4" stroke-dasharray="36 28"/>
+  <ellipse cx="330" cy="274" rx="250" ry="9" fill="#14202b" opacity=".2"/>
+  <rect x="60" y="92" width="360" height="164" rx="6" fill="#e6ebef" stroke="#2b3742" stroke-width="4"/>
+  <path d="M424 256V150c0-8 6-14 14-14h74c8 0 14 4 18 10l30 50c3 4 4 8 4 12v48z" fill="#2b3742"/>
+  <path d="M446 150h56l24 42h-80z" fill="#8fa3b3"/>
+  <rect x="60" y="256" width="504" height="10" fill="#1d2731"/>
+  <circle cx="150" cy="272" r="30" fill="#0f1720"/><circle cx="150" cy="272" r="13" fill="#9aa6b2"/>
+  <circle cx="230" cy="272" r="30" fill="#0f1720"/><circle cx="230" cy="272" r="13" fill="#9aa6b2"/>
+  <circle cx="500" cy="272" r="30" fill="#0f1720"/><circle cx="500" cy="272" r="13" fill="#9aa6b2"/>
+  <rect y="324" width="640" height="36" fill="#14202b"/>
+  <text x="16" y="347" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#e8eef4">DEMO FIXTURE 4 - not a live camera</text>
+</svg>

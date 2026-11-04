@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse
 from app.api.routes import router
 from app.config_loader import REPO_ROOT, ConfigError, ConfigStore
 from app.db import init_db, make_engine
+from app.services.camera import CameraStore
 from app.services.scenarios import ScenarioStore
 
 DEFAULT_CORS_ORIGINS = "http://localhost:3000,http://127.0.0.1:3000"
@@ -23,10 +24,12 @@ def create_app(
     config_dir: Path | None = None,
     database_url: str | None = None,
     fixtures_dir: Path | None = None,
+    camera_dir: Path | None = None,
 ) -> FastAPI:
     config = ConfigStore(config_dir)  # fails fast on a malformed config file
     engine = make_engine(database_url)
     scenarios = ScenarioStore(fixtures_dir or REPO_ROOT / "fixtures" / "scenarios")
+    camera = CameraStore(camera_dir or REPO_ROOT / "fixtures" / "camera")
 
     @asynccontextmanager
     async def lifespan(_: FastAPI):
@@ -45,6 +48,7 @@ def create_app(
     app.state.config = config
     app.state.engine = engine
     app.state.scenarios = scenarios
+    app.state.camera = camera
 
     origins = [o.strip() for o in os.environ.get("CORS_ORIGINS", DEFAULT_CORS_ORIGINS).split(",") if o.strip()]
     app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["*"], allow_headers=["*"])

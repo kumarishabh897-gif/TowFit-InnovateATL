@@ -1,6 +1,118 @@
 /*
- * Design tokens for the TowFit Console (CSS variables).
- * Intentionally empty in Phase 0: colors, type scale, spacing and motion values are
- * decided in Phase 3 after loading the design skills. GREEN / YELLOW / RED must never
- * rely on color alone; each state pairs with an icon and a word.
+ * Design tokens for the TowFit Console.
+ *
+ * Verdict colors: GO = GREEN, HOLD = YELLOW, STOP = RED. Every pairing below was checked for WCAG AA
+ * (text >= 4.5:1, control borders >= 3:1). Color is never the only signal: each verdict also has its own
+ * shape (circle, triangle, octagon) and a word.
+ *
+ * Scene: an operator in a cab or a dispatcher at a wall screen, in daylight or at night, so both themes are
+ * first class. Light is the default because it holds up under stage lighting and projectors; dark follows the
+ * system setting, and the toggle overrides both.
  */
+
+:root {
+  color-scheme: light;
+
+  --canvas: #f3f5f7;
+  --surface: #ffffff;
+  --sunken: #eaeef2;
+  --line: #d3d9df;
+  --line-strong: #8a96a2;
+
+  --ink: #111c26;
+  --ink-2: #435160;
+  --ink-3: #566472;
+
+  --accent: #0b5c8f;
+  --accent-fg: #ffffff;
+  --accent-soft: #e3f0f8;
+
+  --go: #0d6b3a;
+  --go-fg: #ffffff;
+  --go-soft: #e2f3ea;
+  --go-ink: #0a5430;
+
+  --hold: #f2b400;
+  --hold-fg: #231a00;
+  --hold-soft: #fff3cc;
+  --hold-ink: #6a4700;
+
+  --stop: #b3261e;
+  --stop-fg: #ffffff;
+  --stop-soft: #fde8e6;
+  --stop-ink: #8f1a13;
+
+  --overlay: rgb(10 18 26 / 0.45);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --canvas: #0c131a;
+  --surface: #121b24;
+  --sunken: #0f1720;
+  --line: #24313d;
+  --line-strong: #5f7080;
+
+  --ink: #e9eff5;
+  --ink-2: #b3bfcb;
+  --ink-3: #92a0ad;
+
+  --accent: #6cb8ea;
+  --accent-fg: #06121b;
+  --accent-soft: #14293a;
+
+  --go: #38b26e;
+  --go-fg: #04150b;
+  --go-soft: #0f2a1c;
+  --go-ink: #7fdba6;
+
+  --hold: #f5b800;
+  --hold-fg: #221a00;
+  --hold-soft: #2e2506;
+  --hold-ink: #f2cc5c;
+
+  --stop: #ef5a52;
+  --stop-fg: #1c0403;
+  --stop-soft: #3a1512;
+  --stop-ink: #ff9a94;
+
+  --overlay: rgb(0 0 0 / 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --canvas: #0c131a;
+    --surface: #121b24;
+    --sunken: #0f1720;
+    --line: #24313d;
+    --line-strong: #5f7080;
+
+    --ink: #e9eff5;
+    --ink-2: #b3bfcb;
+    --ink-3: #92a0ad;
+
+    --accent: #6cb8ea;
+    --accent-fg: #06121b;
+    --accent-soft: #14293a;
+
+    --go: #38b26e;
+    --go-fg: #04150b;
+    --go-soft: #0f2a1c;
+    --go-ink: #7fdba6;
+
+    --hold: #f5b800;
+    --hold-fg: #221a00;
+    --hold-soft: #2e2506;
+    --hold-ink: #f2cc5c;
+
+    --stop: #ef5a52;
+    --stop-fg: #1c0403;
+    --stop-soft: #3a1512;
+    --stop-ink: #ff9a94;
+
+    --overlay: rgb(0 0 0 / 0.6);
+  }
+}

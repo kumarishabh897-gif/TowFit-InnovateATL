@@ -6,12 +6,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "gen:api": "openapi-typescript ../../docs/openapi.json -o lib/api/schema.d.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@tanstack/react-query": "^5.103.1",
+    "motion": "^13.4.0",
     "next": "16.3.5",
+    "openapi-fetch": "^0.17.0",
+    "radix-ui": "^1.6.7",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "sonner": "^2.0.8",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -20,6 +29,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "openapi-typescript": "^7.13.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

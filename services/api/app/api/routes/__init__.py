@@ -1,9 +1,10 @@
 from fastapi import APIRouter
 
-from app.api.routes import assumptions, decisions, fleet, scenarios, towfit
+from app.api.routes import assumptions, camera, decisions, fleet, scenarios, towfit
 
 router = APIRouter(prefix="/v1")
 router.include_router(fleet.router)
+router.include_router(camera.router)
 router.include_router(scenarios.router)
 router.include_router(towfit.router)
 router.include_router(decisions.router)

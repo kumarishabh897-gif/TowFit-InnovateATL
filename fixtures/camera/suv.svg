@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Demo fixture frame 2: compact SUV">
+  <title>Demo fixture frame 2: compact SUV</title>
+  <rect width="640" height="360" fill="#cfd8df"/>
+  <rect y="226" width="640" height="98" fill="#aeb9c2"/>
+  <path d="M0 300H640" stroke="#e9eef2" stroke-width="4" stroke-dasharray="36 28"/>
+  <ellipse cx="330" cy="272" rx="240" ry="9" fill="#14202b" opacity=".2"/>
+  <polygon points="96,244 108,224 170,210 214,158 244,144 470,144 512,158 536,222 552,240 552,258 112,258 96,252" fill="#2b3742" stroke="#2b3742" stroke-width="6" stroke-linejoin="round"/>
+  <polygon points="222,206 250,162 356,162 356,206" fill="#8fa3b3"/>
+  <polygon points="368,162 468,162 500,206 368,206" fill="#8fa3b3"/>
+  <circle cx="190" cy="268" r="34" fill="#0f1720"/><circle cx="190" cy="268" r="15" fill="#9aa6b2"/>
+  <circle cx="474" cy="268" r="34" fill="#0f1720"/><circle cx="474" cy="268" r="15" fill="#9aa6b2"/>
+  <rect y="324" width="640" height="36" fill="#14202b"/>
+  <text x="16" y="347" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#e8eef4">DEMO FIXTURE 2 - not a live camera</text>
+</svg>

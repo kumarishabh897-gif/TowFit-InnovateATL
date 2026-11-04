@@ -1,0 +1,32 @@
+{
+  "frames": [
+    {
+      "id": "frame_sedan",
+      "file": "sedan.svg",
+      "caption": "Demo frame 1: sedan",
+      "spec_id": "honda_accord_2022",
+      "vehicle_class": "passenger_car"
+    },
+    {
+      "id": "frame_suv",
+      "file": "suv.svg",
+      "caption": "Demo frame 2: compact SUV",
+      "spec_id": "toyota_rav4_2022",
+      "vehicle_class": "suv"
+    },
+    {
+      "id": "frame_pickup",
+      "file": "pickup.svg",
+      "caption": "Demo frame 3: full-size pickup",
+      "spec_id": "ford_f150_supercrew_4x4_2022",
+      "vehicle_class": "pickup"
+    },
+    {
+      "id": "frame_box_truck",
+      "file": "box_truck.svg",
+      "caption": "Demo frame 4: delivery box truck",
+      "spec_id": "isuzu_npr_hd_box_truck",
+      "vehicle_class": "box_truck"
+    }
+  ]
+}

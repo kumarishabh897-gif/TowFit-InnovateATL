@@ -13,6 +13,7 @@ from app.models import (
     OperatorAction,
     Provenance,
     UnitProfile,
+    VehicleProfile,
     Verdict,
     VerdictStatus,
 )
@@ -139,3 +140,21 @@ class AssumptionsResponse(BaseModel):
     assumptions: list[Assumption]
     total: int
     unvalidated_count: int
+
+
+CLASSIFICATION_LABEL = "SIM classification (demo fixture, not a live model)"
+
+
+class CameraFrame(BaseModel):
+    id: str
+    caption: str
+    image_url: str  # path on this API, e.g. /v1/camera/frames/frame_sedan/image
+
+
+class CameraClassification(BaseModel):
+    """What the demo classifier "sees" in a canned frame. There is no computer-vision model behind this."""
+
+    frame_id: str
+    provenance: Provenance = Provenance.SIM
+    label: str = CLASSIFICATION_LABEL
+    vehicle: VehicleProfile
