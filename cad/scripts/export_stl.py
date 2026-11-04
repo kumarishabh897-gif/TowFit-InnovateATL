@@ -9,9 +9,9 @@ Autodesk account. An STL generated from the same rig_spec.py gives anyone with
 the repo something they can open, measure and sanity-check. If the two ever
 disagree, rig_spec.py is wrong - it is the only place the geometry is defined.
 
-Mesh quality is deliberately plain: flat facets, no normals smoothing, no
-boolean union between parts. It is for looking at and measuring, not for
-printing or analysis.
+Mesh quality is deliberately plain: flat facets, no smoothing, no boolean
+union between parts. It is for looking at and measuring, not for printing or
+analysis.
 
 Author: VK12034
 """
@@ -24,11 +24,31 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import rig_spec  # noqa: E402
 
-CYL_SEGMENTS = 48
+SEGMENTS = 40
 
 
-def _tri(a, b, c):
-    return (a, b, c)
+# --- axis mapping ---------------------------------------------------------
+# Each primitive is generated in a local (u, v, w) frame where w runs along
+# the part's own axis, then mapped into world xyz. Keeps one tessellation
+# routine instead of three near-copies.
+
+def _mapper(axis):
+    if axis == "x":
+        return lambda u, v, w: (w, u, v)
+    if axis == "y":
+        return lambda u, v, w: (u, w, v)
+    if axis == "z":
+        return lambda u, v, w: (u, v, w)
+    raise ValueError("axis must be x, y or z, got %r" % axis)
+
+
+def _centre_uvw(axis, centre):
+    cx, cy, cz = centre
+    if axis == "x":
+        return cy, cz, cx
+    if axis == "y":
+        return cx, cz, cy
+    return cx, cy, cz
 
 
 def box_triangles(centre, size):
@@ -37,43 +57,115 @@ def box_triangles(centre, size):
     x0, x1 = cx - hx, cx + hx
     y0, y1 = cy - hy, cy + hy
     z0, z1 = cz - hz, cz + hz
-
-    v = [
-        (x0, y0, z0), (x1, y0, z0), (x1, y1, z0), (x0, y1, z0),
-        (x0, y0, z1), (x1, y0, z1), (x1, y1, z1), (x0, y1, z1),
-    ]
-    faces = [
-        (0, 2, 1), (0, 3, 2),   # bottom
-        (4, 5, 6), (4, 6, 7),   # top
-        (0, 1, 5), (0, 5, 4),   # -Y
-        (2, 3, 7), (2, 7, 6),   # +Y
-        (1, 2, 6), (1, 6, 5),   # +X
-        (0, 4, 7), (0, 7, 3),   # -X
-    ]
-    return [_tri(v[i], v[j], v[k]) for i, j, k in faces]
+    v = [(x0, y0, z0), (x1, y0, z0), (x1, y1, z0), (x0, y1, z0),
+         (x0, y0, z1), (x1, y0, z1), (x1, y1, z1), (x0, y1, z1)]
+    faces = [(0, 2, 1), (0, 3, 2), (4, 5, 6), (4, 6, 7),
+             (0, 1, 5), (0, 5, 4), (2, 3, 7), (2, 7, 6),
+             (1, 2, 6), (1, 6, 5), (0, 4, 7), (0, 7, 3)]
+    return [(v[i], v[j], v[k]) for i, j, k in faces]
 
 
-def cyl_x_triangles(centre, diameter, length, segments=CYL_SEGMENTS):
-    """Cylinder with its axis along X."""
-    cx, cy, cz = centre
+def _ring(cu, cv, r, segments):
+    return [(cu + r * math.cos(2 * math.pi * i / segments),
+             cv + r * math.sin(2 * math.pi * i / segments))
+            for i in range(segments)]
+
+
+def cyl_triangles(axis, centre, diameter, length, segments=SEGMENTS):
+    m = _mapper(axis)
+    cu, cv, cw = _centre_uvw(axis, centre)
     r = diameter / 2.0
-    x0, x1 = cx - length / 2.0, cx + length / 2.0
-
-    ring = []
-    for i in range(segments):
-        theta = 2.0 * math.pi * i / segments
-        ring.append((cy + r * math.cos(theta), cz + r * math.sin(theta)))
-
+    w0, w1 = cw - length / 2.0, cw + length / 2.0
+    ring = _ring(cu, cv, r, segments)
     tris = []
     for i in range(segments):
-        y0, z0 = ring[i]
-        y1, z1 = ring[(i + 1) % segments]
-        # side
-        tris.append(_tri((x0, y0, z0), (x1, y0, z0), (x1, y1, z1)))
-        tris.append(_tri((x0, y0, z0), (x1, y1, z1), (x0, y1, z1)))
-        # caps
-        tris.append(_tri((x0, cy, cz), (x0, y1, z1), (x0, y0, z0)))
-        tris.append(_tri((x1, cy, cz), (x1, y0, z0), (x1, y1, z1)))
+        u0, v0 = ring[i]
+        u1, v1 = ring[(i + 1) % segments]
+        a, b = m(u0, v0, w0), m(u0, v0, w1)
+        c, dd = m(u1, v1, w1), m(u1, v1, w0)
+        tris.append((a, b, c))
+        tris.append((a, c, dd))
+        tris.append((m(cu, cv, w0), m(u1, v1, w0), m(u0, v0, w0)))
+        tris.append((m(cu, cv, w1), m(u0, v0, w1), m(u1, v1, w1)))
+    return tris
+
+
+def tube_cyl_triangles(axis, centre, od, idia, length, segments=SEGMENTS):
+    """Hollow cylinder: outer wall, inner wall, and two annular end faces."""
+    m = _mapper(axis)
+    cu, cv, cw = _centre_uvw(axis, centre)
+    w0, w1 = cw - length / 2.0, cw + length / 2.0
+    outer = _ring(cu, cv, od / 2.0, segments)
+    inner = _ring(cu, cv, idia / 2.0, segments)
+    tris = []
+    for i in range(segments):
+        j = (i + 1) % segments
+        ou0, ov0 = outer[i]
+        ou1, ov1 = outer[j]
+        iu0, iv0 = inner[i]
+        iu1, iv1 = inner[j]
+        # outer wall
+        tris.append((m(ou0, ov0, w0), m(ou0, ov0, w1), m(ou1, ov1, w1)))
+        tris.append((m(ou0, ov0, w0), m(ou1, ov1, w1), m(ou1, ov1, w0)))
+        # inner wall (reversed winding)
+        tris.append((m(iu0, iv0, w0), m(iu1, iv1, w1), m(iu0, iv0, w1)))
+        tris.append((m(iu0, iv0, w0), m(iu1, iv1, w0), m(iu1, iv1, w1)))
+        # end annuli
+        tris.append((m(iu0, iv0, w0), m(ou0, ov0, w0), m(ou1, ov1, w0)))
+        tris.append((m(iu0, iv0, w0), m(ou1, ov1, w0), m(iu1, iv1, w0)))
+        tris.append((m(iu0, iv0, w1), m(ou1, ov1, w1), m(ou0, ov0, w1)))
+        tris.append((m(iu0, iv0, w1), m(iu1, iv1, w1), m(ou1, ov1, w1)))
+    return tris
+
+
+def gusset_triangles(plane, at, corner, legs, thickness):
+    """Right-triangle prism, `thickness` centred on `at`."""
+    u0, v0 = corner
+    du, dv = legs
+    tri2d = [(u0, v0), (u0 + du, v0), (u0, v0 + dv)]
+    n0, n1 = at - thickness / 2.0, at + thickness / 2.0
+
+    if plane == "yz":
+        def put(u, v, n):
+            return (n, u, v)
+    elif plane == "xz":
+        def put(u, v, n):
+            return (u, n, v)
+    elif plane == "xy":
+        def put(u, v, n):
+            return (u, v, n)
+    else:
+        raise ValueError("plane must be yz, xz or xy, got %r" % plane)
+
+    a = [put(u, v, n0) for u, v in tri2d]
+    b = [put(u, v, n1) for u, v in tri2d]
+    tris = [(a[0], a[2], a[1]), (b[0], b[1], b[2])]
+    for i in range(3):
+        j = (i + 1) % 3
+        tris.append((a[i], b[i], b[j]))
+        tris.append((a[i], b[j], a[j]))
+    return tris
+
+
+def triangles_for(part):
+    kind = part["kind"]
+    if kind == "box":
+        tris = box_triangles(part["centre"], part["size"])
+    elif kind == "cyl":
+        tris = cyl_triangles(part["axis"], part["centre"],
+                             part["diameter"], part["length"])
+    elif kind == "tube_cyl":
+        tris = tube_cyl_triangles(part["axis"], part["centre"], part["od"],
+                                  part["idia"], part["length"])
+    elif kind == "gusset":
+        tris = gusset_triangles(part["plane"], part["at"], part["corner"],
+                                part["legs"], part["thickness"])
+    else:
+        raise ValueError("unknown primitive %r" % kind)
+
+    rot = part.get("rot")
+    if rot:
+        tris = [tuple(rig_spec.rotate_point(v, rot) for v in tri) for tri in tris]
     return tris
 
 
@@ -84,14 +176,6 @@ def normal(tri):
     nx, ny, nz = uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx
     mag = math.sqrt(nx * nx + ny * ny + nz * nz)
     return (0.0, 0.0, 0.0) if mag == 0 else (nx / mag, ny / mag, nz / mag)
-
-
-def triangles_for(part):
-    if part["kind"] == "box":
-        return box_triangles(part["centre"], part["size"])
-    if part["kind"] == "cyl_x":
-        return cyl_x_triangles(part["centre"], part["diameter"], part["length"])
-    raise ValueError("unknown primitive %r" % part["kind"])
 
 
 def write_binary_stl(path, tris, header_text):
@@ -123,6 +207,7 @@ def main(argv):
 
     envelope, source = rig_spec.load_envelope()
     part_list = rig_spec.parts(envelope)
+    derived = rig_spec.derive(envelope)
 
     tris = []
     for part in part_list:
@@ -137,14 +222,23 @@ def main(argv):
             components.append(part["component"])
 
     print("envelope source : %s" % source)
-    print("parts           : %d across %d components" % (len(part_list), len(components)))
+    print("parts           : %d across %d components"
+          % (len(part_list), len(components)))
     print("triangles       : %d" % len(tris))
     print("bounding box mm : X %.1f..%.1f   Y %.1f..%.1f   Z %.1f..%.1f"
           % (xlo, xhi, ylo, yhi, zlo, zhi))
     print("overall mm      : %.0f wide x %.0f long x %.0f tall"
           % (xhi - xlo, yhi - ylo, zhi - zlo))
+    print("mechanism       : arm %.0f mm at %.1f deg, ram %.0f mm at %.1f deg"
+          % (derived["arm_run"], derived["arm_deg"],
+             derived["ram_run"], derived["ram_deg"]))
     print("written         : %s (%.1f KB)"
           % (out_path, os.path.getsize(out_path) / 1024.0))
+
+    print("\nper component")
+    for name in components:
+        n = sum(1 for p in part_list if p["component"] == name)
+        print("  %-26s %3d parts" % (name, n))
 
     print("\nenvelope checks")
     failed = 0

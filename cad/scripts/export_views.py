@@ -23,13 +23,16 @@ import rig_spec  # noqa: E402
 
 # One colour per component so the views read as an assembly, not a blob.
 COLOURS = {
-    "01 Receiver Stinger": "#8b93a7",
-    "02 Mast": "#6f7b92",
-    "03 Lift Actuator": "#c2703d",
-    "04 Reach Boom": "#4e7ca1",
-    "05 Main Crossbeam": "#3f6c93",
-    "06 Telescoping Arms": "#5c9ec7",
-    "07 Tire Cradles": "#c9a227",
+    "01 Receiver Interface": "#8b93a7",
+    "02 Ram Tower": "#79839b",
+    "03 Pivot Yoke": "#6f7b92",
+    "04 Lift Arm": "#d4a62a",
+    "05 Lift Ram": "#c2703d",
+    "06 Lower Boom": "#4e7ca1",
+    "07 Main Crossbeam": "#3f6c93",
+    "08 Telescoping Arms": "#5c9ec7",
+    "09 Tire Cradles": "#c9a227",
+    "10 Hydraulics": "#7a5a4a",
 }
 
 
@@ -38,23 +41,30 @@ def silhouettes(part, view):
 
     ('rect', x, y, w, h) or ('circle', cx, cy, r), in millimetres, in that
     view's own 2D frame.
+
+    Projection uses the part's bounds, which is exact for an axis-aligned box
+    and a conservative over-estimate for an angled member. A cylinder seen
+    down its own axis is drawn as a circle, since that reads much better than
+    the square its bounds would give.
     """
-    cx, cy, cz = part["centre"]
+    (xlo, xhi), (ylo, yhi), (zlo, zhi) = rig_spec.part_bounds(part)
 
-    if part["kind"] == "box":
-        sx, sy, sz = part["size"]
-        if view == "top":
-            return [("rect", cx - sx / 2, cy - sy / 2, sx, sy)]
-        if view == "front":
-            return [("rect", cx - sx / 2, cz - sz / 2, sx, sz)]
-        return [("rect", cy - sy / 2, cz - sz / 2, sy, sz)]
+    if part["kind"] in ("cyl", "tube_cyl") and not part.get("rot"):
+        cx, cy, cz = part["centre"]
+        r = (part["od"] if part["kind"] == "tube_cyl" else part["diameter"]) / 2.0
+        axis = part["axis"]
+        if view == "top" and axis == "z":
+            return [("circle", cx, cy, r)]
+        if view == "front" and axis == "y":
+            return [("circle", cx, cz, r)]
+        if view == "side" and axis == "x":
+            return [("circle", cy, cz, r)]
 
-    d, length = part["diameter"], part["length"]
     if view == "top":
-        return [("rect", cx - length / 2, cy - d / 2, length, d)]
+        return [("rect", xlo, ylo, xhi - xlo, yhi - ylo)]
     if view == "front":
-        return [("rect", cx - length / 2, cz - d / 2, length, d)]
-    return [("circle", cy, cz, d / 2)]
+        return [("rect", xlo, zlo, xhi - xlo, zhi - zlo)]
+    return [("rect", ylo, zlo, yhi - ylo, zhi - zlo)]
 
 
 VIEWS = [
