@@ -38,7 +38,7 @@ cd services/api
 .venv/bin/uvicorn app.main:create_app --factory --reload --port 8000
 ```
 
-Interactive docs are at http://localhost:8000/docs. It runs fully offline. Everything is under `/v1`:
+Interactive docs are at https://clearanceos.vercel.app/docs for the live deployment, or `/docs` on the port you started it on. It runs fully offline. Everything is under `/v1`:
 
 | Endpoint | What |
 |---|---|
