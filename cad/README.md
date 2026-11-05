@@ -207,6 +207,15 @@ Answers belong in `config/assumptions.yaml` with status moved off
 - It **reloads `rig_spec` on every run**. Fusion keeps one Python interpreter
   alive per session, so without that an edited spec stays cached and the
   script silently rebuilds the previous geometry.
-- It **builds into the active document when that document is empty**, rather
-  than always creating a new one. An earlier version called `documents.add()`
-  before anything could fail, so every error stranded an empty tab.
+- It **builds into the active document only when that document is an unsaved,
+  unnamed, geometry-free one**, otherwise it opens a new one. An earlier
+  version called `documents.add()` before anything could fail, so every error
+  stranded an empty tab — and because the script switches the design to direct
+  modelling, which discards a timeline, it must never do that to a real file
+  that merely happens to be empty at that moment.
+- The script **cannot name the document**. Fusion derives the root component's
+  name from the document, and a document has no name until it is saved, so
+  `root.name = ...` raises `root component name cannot be changed` and is
+  caught. Save the document as **`ClearanceOS Tire-Lift Mover v1`** and the
+  root component picks the name up by itself. The committed `.f3d` was
+  exported after that save, so it already carries it.
