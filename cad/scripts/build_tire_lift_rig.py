@@ -218,10 +218,11 @@ def _new_design(app):
 
     This deliberately never reuses an existing document. An earlier version
     reused one that was unsaved, unnamed and empty, which is exactly the shape
-    of another Claude session's scratch document in the same Fusion process -
-    and since this script switches the design to direct modelling, reusing one
-    would discard that session's timeline and fill its document with this rig.
-    One Fusion process can have several drivers; "looks empty" is not consent.
+    of a scratch document someone else is part-way through in the same Fusion
+    process - and since this script switches the design to direct modelling,
+    reusing one would discard their timeline and fill their document with this
+    rig. One Fusion process can have several drivers, whether that is a second
+    person, another script, or a scheduled job; "looks empty" is not consent.
 
     The stranded-document problem that reuse was solving is handled at the
     other end instead: run() closes this document if the build fails before
