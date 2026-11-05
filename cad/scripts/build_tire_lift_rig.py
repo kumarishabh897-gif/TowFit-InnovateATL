@@ -213,33 +213,47 @@ BUILDERS = {
 # Document, parameters, appearances
 # --------------------------------------------------------------------------
 
-def _target_design(app):
-    """Build into the active document when it is a blank scratch one, else
-    open a new one.
+def _new_design(app):
+    """Always create a fresh document for this build, and return it directly.
 
-    An earlier version always called documents.add() before building, so every
-    failed run stranded an empty document. Reusing an empty one keeps the tab
-    list honest while iterating.
+    This deliberately never reuses an existing document. An earlier version
+    reused one that was unsaved, unnamed and empty, which is exactly the shape
+    of another Claude session's scratch document in the same Fusion process -
+    and since this script switches the design to direct modelling, reusing one
+    would discard that session's timeline and fill its document with this rig.
+    One Fusion process can have several drivers; "looks empty" is not consent.
 
-    The reuse test is deliberately strict. This script switches the design to
-    direct modelling, which throws away the timeline, and it is not allowed to
-    do that to somebody's real file just because the file happens to be empty
-    at that moment. So reuse requires an unsaved, unnamed, geometry-free
-    document - anything saved or named gets left alone.
+    The stranded-document problem that reuse was solving is handled at the
+    other end instead: run() closes this document if the build fails before
+    producing anything.
+
+    Returning the document's own Design rather than reading app.activeProduct
+    matters for the same reason. Another session can change the active
+    document between any two calls, and every later lookup would then land in
+    their file.
     """
-    design = adsk.fusion.Design.cast(app.activeProduct)
-    if design is not None:
-        root = design.rootComponent
-        empty = root.occurrences.count == 0 and root.bRepBodies.count == 0
+    doc = app.documents.add(adsk.core.DocumentTypes.FusionDesignDocumentType)
+    try:
+        # Scan the products and cast, rather than asking for one by name.
+        # The identifier is "DesignProductType", not "Design", and
+        # itemByProductType raises rather than returning None when it misses -
+        # so a guess at the string orphans the document it just created.
+        design = None
+        for i in range(doc.products.count):
+            candidate = adsk.fusion.Design.cast(doc.products.item(i))
+            if candidate is not None:
+                design = candidate
+                break
+        if design is None:
+            raise RuntimeError("newly created document has no Design product")
+        return doc, design
+    except Exception:
+        # Never leave behind a document this function created.
         try:
-            doc = design.parentDocument
-            scratch = (not doc.isSaved) and doc.name.lower().startswith("untitled")
+            doc.close(False)
         except Exception:
-            scratch = False
-        if empty and scratch:
-            return design
-    app.documents.add(adsk.core.DocumentTypes.FusionDesignDocumentType)
-    return adsk.fusion.Design.cast(app.activeProduct)
+            pass
+        raise
 
 
 def add_parameters(design, derived):
@@ -368,6 +382,8 @@ def export_outputs(design):
 
 def run(context):
     ui = None
+    doc = None
+    design = None
     try:
         app = adsk.core.Application.get()
         ui = app.userInterface
@@ -376,7 +392,7 @@ def run(context):
         derived = rig_spec.derive(envelope)
         part_list = rig_spec.parts(envelope)
 
-        design = _target_design(app)
+        doc, design = _new_design(app)
         # Direct modelling, not parametric. The parametric model IS
         # rig_spec.py - nobody will ever hand-edit the generated timeline -
         # and a 163-part build creates enough history to make Fusion crawl or
@@ -418,7 +434,14 @@ def run(context):
         add_parameters(design, derived)
         styled, unstyled = apply_appearances(app, design, components)
         failures.extend(unstyled)
-        app.activeViewport.fit()
+        # Fit only while our own document is still in front. Another session
+        # sharing this Fusion process may have switched away, and zooming
+        # someone else's view mid-task is both confusing and not ours to do.
+        try:
+            if app.activeDocument is doc:
+                app.activeViewport.fit()
+        except Exception:
+            pass
         exported = export_outputs(design)
 
         results = rig_spec.checks(envelope)
@@ -472,6 +495,20 @@ def run(context):
     except Exception:
         detail = traceback.format_exc()
         print("BUILD FAILED\n" + detail)
+
+        # Clean up our own document rather than leaving an empty tab behind.
+        # Only when it is still empty: once there is geometry, leaving it open
+        # is worth more for diagnosis than a tidy tab list. Never touches any
+        # other document, which is the whole point of creating our own.
+        if doc is not None and design is not None:
+            try:
+                root = design.rootComponent
+                if root.occurrences.count == 0 and root.bRepBodies.count == 0:
+                    doc.close(False)
+                    print("closed the empty document this run created")
+            except Exception:
+                pass
+
         if ui and not QUIET:
             ui.messageBox("Build failed:\n%s" % detail, "TowFit CAD")
         raise
