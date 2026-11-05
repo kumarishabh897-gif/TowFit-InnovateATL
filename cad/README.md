@@ -9,10 +9,12 @@ vehicle — in neutral — out of a live lane.
 > Nothing here has been through a load case. Every envelope value it respects
 > is still `PLACEHOLDER` in `config/assumptions.yaml`.
 
-![Three orthographic views of the rig](reference/rig_views.svg)
+![Rendered view of the rig](reference/rig_render.png)
 
 **163 parts across 10 components.** Overall 1 972 × 1 288 × 560 mm in the
 lowered position.
+
+![Three orthographic views of the rig](reference/rig_views.svg)
 
 ## The mechanism
 
@@ -81,8 +83,8 @@ disagrees with it, the consumer is wrong.
 | `scripts/build_tire_lift_rig.py` | Fusion 360 script. Builds the parametric solid. |
 | `scripts/export_stl.py` | Writes a binary STL. No Fusion, no packages. |
 | `scripts/export_views.py` | Writes the three-view SVG above. |
-| `exports/` | Build outputs. Regenerate rather than hand-edit. |
-| `reference/` | Generated drawings. |
+| `exports/` | `.f3d`, `.step`, `.stl`. Build outputs — regenerate rather than hand-edit. |
+| `reference/` | Generated drawings and render. |
 
 ## Rebuild
 
@@ -95,9 +97,14 @@ Both print which file the envelope came from, and `export_stl.py` exits
 non-zero if the geometry violates it.
 
 In Fusion 360: **Utilities → ADD-INS → Scripts and Add-Ins**, run
-`TowFitRig`. It builds into the active document when that document is empty,
-writes the envelope into the parameter table with each value's registry key,
-applies a material per component, and reports the same checks.
+`TowFitRig`. It builds the solid, writes the envelope into the parameter
+table with each value's registry key, applies a material per component,
+exports `.f3d` and `.step` into `exports/`, and reports the same checks.
+
+It builds in **direct modelling mode**, not parametric. The parametric model
+is `rig_spec.py` — nobody will hand-edit a 163-part generated timeline — and
+keeping the history made Fusion crawl and eventually fall over on this
+part count.
 
 ## Components
 

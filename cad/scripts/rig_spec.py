@@ -65,17 +65,25 @@ REPO_HINTS = [
 ]
 
 # Fusion appearance library names, applied per component where available.
+# These are exact names from the Fusion Appearance Library - "Chrome", not
+# "Chrome Polished"; "Rubber - Hard", not "Rubber". A name that does not
+# match is skipped silently, so a typo shows up as a grey part rather than
+# an error.
+#
+# The palette is chosen so the mechanism reads at a glance: the moving
+# structure is yellow plant equipment, the ram is chrome, and everything
+# bolted to the car stays steel.
 MATERIALS = {
     "01 Receiver Interface": "Steel - Satin",
     "02 Ram Tower": "Steel - Satin",
-    "03 Pivot Yoke": "Steel - Satin",
+    "03 Pivot Yoke": "Steel - Cast",
     "04 Lift Arm": "Paint - Enamel Glossy (Yellow)",
-    "05 Lift Ram": "Chrome Polished",
+    "05 Lift Ram": "Chrome",
     "06 Lower Boom": "Paint - Enamel Glossy (Yellow)",
     "07 Main Crossbeam": "Paint - Enamel Glossy (Yellow)",
-    "08 Telescoping Arms": "Steel - Satin",
-    "09 Tire Cradles": "Steel - Satin",
-    "10 Hydraulics": "Rubber",
+    "08 Telescoping Arms": "Aluminum - Satin",
+    "09 Tire Cradles": "Paint - Enamel Glossy (Dark Grey)",
+    "10 Hydraulics": "Rubber - Hard",
 }
 
 

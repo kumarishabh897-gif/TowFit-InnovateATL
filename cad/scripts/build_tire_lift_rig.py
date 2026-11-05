@@ -35,10 +35,18 @@ importlib.reload(rig_spec)
 
 _AXIS_INDEX = {"x": 0, "y": 1, "z": 2}
 
+# Set to True by a caller that has no one to click OK - running through the
+# Fusion MCP connector, say, where a modal dialog would hang the session.
+# The summary is printed either way.
+QUIET = False
+
 
 def cm(mm_value):
     """Fusion's API is centimetres; the design is millimetres."""
     return mm_value / 10.0
+
+
+_PLANE_CACHE = {}
 
 
 def _plane(comp, axis, coord_mm):
@@ -47,7 +55,17 @@ def _plane(comp, axis, coord_mm):
     Fusion's XZ and YZ planes do not have a documented normal sign, so an
     offset can land on the wrong side. Rather than hard-code an assumption,
     place the plane, read back where it actually went, and flip if needed.
+
+    Planes are cached per component and position. The rig has 163 parts but
+    far fewer distinct planes - most of the crossbeam, boom and arm hardware
+    sits at the same few heights - and construction planes are among the more
+    expensive things to create in bulk.
     """
+    key = (comp.entityToken, axis, round(coord_mm, 4))
+    cached = _PLANE_CACHE.get(key)
+    if cached is not None:
+        return cached
+
     base = {
         "x": comp.yZConstructionPlane,
         "y": comp.xZConstructionPlane,
@@ -62,6 +80,7 @@ def _plane(comp, axis, coord_mm):
         plane_input.setByOffset(base, adsk.core.ValueInput.createByReal(distance))
         plane = planes.add(plane_input)
         if abs(plane.geometry.origin.asArray()[idx] - want) < 1e-6:
+            _PLANE_CACHE[key] = plane
             return plane
         plane.deleteMe()
     raise RuntimeError("could not place a %s plane at %.3f mm" % (axis, coord_mm))
@@ -195,16 +214,29 @@ BUILDERS = {
 # --------------------------------------------------------------------------
 
 def _target_design(app):
-    """Build into the active document when it is empty, else open a new one.
+    """Build into the active document when it is a blank scratch one, else
+    open a new one.
 
     An earlier version always called documents.add() before building, so every
     failed run stranded an empty document. Reusing an empty one keeps the tab
     list honest while iterating.
+
+    The reuse test is deliberately strict. This script switches the design to
+    direct modelling, which throws away the timeline, and it is not allowed to
+    do that to somebody's real file just because the file happens to be empty
+    at that moment. So reuse requires an unsaved, unnamed, geometry-free
+    document - anything saved or named gets left alone.
     """
     design = adsk.fusion.Design.cast(app.activeProduct)
     if design is not None:
         root = design.rootComponent
-        if root.occurrences.count == 0 and root.bRepBodies.count == 0:
+        empty = root.occurrences.count == 0 and root.bRepBodies.count == 0
+        try:
+            doc = design.parentDocument
+            scratch = (not doc.isSaved) and doc.name.lower().startswith("untitled")
+        except Exception:
+            scratch = False
+        if empty and scratch:
             return design
     app.documents.add(adsk.core.DocumentTypes.FusionDesignDocumentType)
     return adsk.fusion.Design.cast(app.activeProduct)
@@ -259,29 +291,79 @@ def apply_appearances(app, design, components):
     Entirely cosmetic, and the appearance library names vary between Fusion
     releases, so every step is optional.
     """
-    applied = 0
+    applied, missing = 0, []
     try:
         library = app.materialLibraries.itemByName("Fusion Appearance Library")
         if library is None:
-            return 0
-    except Exception:
-        return 0
+            return 0, ["no Fusion Appearance Library"]
+    except Exception as exc:
+        return 0, ["appearance library unavailable: %s" % exc]
+
+    # addByCopy fails once an appearance of that name is already in the
+    # document, so several components asking for the same material would
+    # silently lose all but the first. Copy once, then reuse.
+    local = {}
+
+    def resolve(wanted):
+        if wanted in local:
+            return local[wanted]
+        existing = design.appearances.itemByName(wanted)
+        if existing is None:
+            source = library.appearances.itemByName(wanted)
+            if source is None:
+                local[wanted] = None
+                return None
+            existing = design.appearances.addByCopy(source, wanted)
+        local[wanted] = existing
+        return existing
 
     for name, comp in components.items():
         wanted = rig_spec.MATERIALS.get(name)
         if not wanted:
             continue
         try:
-            source = library.appearances.itemByName(wanted)
-            if source is None:
+            appearance = resolve(wanted)
+            if appearance is None:
+                missing.append("%s: no appearance named %r" % (name, wanted))
                 continue
-            appearance = design.appearances.addByCopy(source, wanted)
             for i in range(comp.bRepBodies.count):
                 comp.bRepBodies.item(i).appearance = appearance
             applied += 1
-        except Exception:
-            continue
-    return applied
+        except Exception as exc:
+            missing.append("%s: %s" % (name, exc))
+    return applied, missing
+
+
+def export_outputs(design):
+    """Write .f3d and .step straight into the repo's cad/exports.
+
+    Doing this from the script rather than File > Export means the outputs
+    land next to the STL and drawings automatically, with no dialog to fill
+    in and no chance of them going to Downloads instead.
+    """
+    out_dir = os.path.normpath(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "exports")
+    )
+    try:
+        os.makedirs(out_dir, exist_ok=True)
+    except OSError as exc:
+        return ["could not create %s: %s" % (out_dir, exc)]
+
+    manager = design.exportManager
+    written = []
+    for label, suffix, factory in (
+        ("Fusion archive", ".f3d", "createFusionArchiveExportOptions"),
+        ("STEP", ".step", "createSTEPExportOptions"),
+    ):
+        path = os.path.join(out_dir, "tire_lift_mover_v1" + suffix)
+        try:
+            options = getattr(manager, factory)(path)
+            manager.execute(options)
+            size = os.path.getsize(path) / 1024.0 if os.path.isfile(path) else 0.0
+            written.append("%s -> %s (%.0f KB)" % (label, os.path.basename(path), size))
+        except Exception as exc:
+            written.append("%s FAILED: %s" % (label, exc))
+    return written
 
 
 def run(context):
@@ -295,10 +377,15 @@ def run(context):
         part_list = rig_spec.parts(envelope)
 
         design = _target_design(app)
-        design.designType = adsk.fusion.DesignTypes.ParametricDesignType
+        # Direct modelling, not parametric. The parametric model IS
+        # rig_spec.py - nobody will ever hand-edit the generated timeline -
+        # and a 163-part build creates enough history to make Fusion crawl or
+        # fall over. Dropping the timeline keeps the build light.
+        design.designType = adsk.fusion.DesignTypes.DirectDesignType
         design.unitsManager.distanceDisplayUnits = (
             adsk.fusion.DistanceUnits.MillimeterDistanceUnits
         )
+        _PLANE_CACHE.clear()
         root = design.rootComponent
         try:
             root.name = "ClearanceOS tire-lift mover v1"
@@ -329,19 +416,33 @@ def run(context):
                 failures.append("%s/%s: %s" % (key, part["name"], exc))
 
         add_parameters(design, derived)
-        styled = apply_appearances(app, design, components)
+        styled, unstyled = apply_appearances(app, design, components)
+        failures.extend(unstyled)
         app.activeViewport.fit()
+        exported = export_outputs(design)
 
         results = rig_spec.checks(envelope)
         bad = [c for c in results if not c[1]]
         verdict = ("all %d checks pass" % len(results) if not bad
                    else "FAILED: " + "; ".join(c[0] for c in bad))
 
-        note = ""
+        note = "\n\nexports:\n  " + "\n  ".join(exported)
         if failures:
-            note = "\n\n%d part(s) failed to build:\n%s" % (
+            note += "\n\n%d part(s) failed to build:\n%s" % (
                 len(failures), "\n".join(failures[:6])
             )
+
+        # Printed as well as shown: when this runs through the MCP connector
+        # rather than the Scripts dialog, nobody is there to click OK.
+        print("built %d parts across %d components, %d styled"
+              % (len(part_list) - len(failures), len(components), styled))
+        for line in exported:
+            print("  " + line)
+        for line in failures[:10]:
+            print("  FAILED " + line)
+
+        if QUIET:
+            return
 
         ui.messageBox(
             "ClearanceOS tire-lift mover v1 built.\n\n"
@@ -369,5 +470,8 @@ def run(context):
         )
 
     except Exception:
-        if ui:
-            ui.messageBox("Build failed:\n%s" % traceback.format_exc(), "TowFit CAD")
+        detail = traceback.format_exc()
+        print("BUILD FAILED\n" + detail)
+        if ui and not QUIET:
+            ui.messageBox("Build failed:\n%s" % detail, "TowFit CAD")
+        raise
